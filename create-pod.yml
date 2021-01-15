@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: springpeople
+spec:
+  containers:
+  - name: springpeople-container
+    image: jocatalin/kubernetes-bootcamp:v1
+    ports:
+      - containerPort: 8080

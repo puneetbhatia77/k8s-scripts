@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: springpeople-cpu
+spec:
+  containers:
+  - name: springpeople-container
+    image: jenkins/jenkins
+    resources:
+      limits:
+        cpu: "1"
+      requests:
+        cpu: "0.5"

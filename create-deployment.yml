@@ -1,0 +1,16 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: springpeople-deployment
+spec:
+  selector:
+    matchLabels:
+      app: springpeople
+  template:
+    metadata:
+      labels:
+        app: springpeople
+    spec:
+      containers:
+      - name: springpeople-container
+        image: nginx
