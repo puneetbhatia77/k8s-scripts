@@ -6,9 +6,25 @@ kubectl get service web
 minikube service web --url
 curl <output of above command IP>
 
+#/etc/hosts
+	192.168.49.2 hello-world.info            # 192.168.49.2 - IP of "minikube service web --url"
+
+curl hello-world.info  
+
+kubectl apply -f example-ingress.yaml
+kubectl get ingress
+curl hello-world.info
 
 kubectl create deployment web2 --image=gcr.io/google-samples/hello-app:2.0
 kubectl expose deployment web2 --port=8080 --type=NodePort
+minikube service web2 --url
+curl <output of above command IP>
+
+#/etc/hosts
+	192.168.49.2 hello-world-2.info           # 192.168.49.2 - IP of "minikube service web --url"
+
+curl hello-world-2.info  
+
 kubectl apply -f example-ingress-2.yaml
 kubectl get ingress
 curl hello-world-2.info  or curl hello-world-2.info/v1
