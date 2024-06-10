@@ -1,0 +1,223 @@
+minikube status
+
+git clone https://github.com/puneetbhatia77/k8s-scripts.git
+cd k8s-scripts
+-----------------------------------------------------------
+
+create-pod.yml
+kubectl apply -f create-pod.yml
+kubectl get pods
+kubectl get deployments          # no deployment created at this point, only pod created.
+
+create-deployment.yml
+kubectl apply -f create-deployment.yml      
+kubectl get deployments             # deployment created
+kubectl get pods
+
+kubectl logs springpeople-deployment-7fb6cb89d7-mfhkx
+kubectl exec -it springpeople-deployment-7fb6cb89d7-mfhkx bash
+kubectl get pods
+
+
+
+kubectl get svc --all-namespaces
+kubectl get svc -n kube-system
+kubectl get svc
+kubectl get svc -n kubernetes-dashboard
+
+kubectl create namespace springpeople
+create-namespace.yml
+kubectl apply -f create-namespace.yml
+kubectl get pods
+kubectl get namespaces
+kubectl get namespaces -A
+kubectl get pods -A
+kubectl get pods --all-namespaces
+kubectl get pods -n springpeople
+
+kubectl delete deployment springpeople-deployment
+kubectl get deployments
+kubectl get pods
+
+
+kubectl get daemonsets
+
+create-daemonset.yml
+kubectl apply -f create-daemonset.yml
+kubectl get daemonsets
+kubectl get pods
+kubectl get pods -o wide
+kubectl logs daemonset-pods-6v7pl
+
+kubectl delete daemonset daemonset-pods
+kubectl get daemonsets
+kubectl get pods
+-------------------------------------------
+vi create-volume.yml
+kubectl apply -f create-volume.yml
+kubectl get volumes
+kubectl get pods
+kubectl logs redis
+kubectl desctibe redis
+kubectl describe redis
+kubectl describe pod redis
+clear
+kubectl describe pod redis
+kubectl exec -it redis bash
+kubectl get pods
+ls
+clear
+vi create-job.yml
+kubectl apply -f create-job.yml
+kubectl get jobs
+kubectl get pods
+kubectl get jobs
+clear
+kubectl get jobs
+kubectl get pods
+vi create-job.yml
+kubectl get pods
+docker images
+clear
+kubectl get pods
+vi create-job.yml
+kubectl get pods
+cat create-pod.yml
+cat create-job.yml
+kubectl get pods
+docker images
+kubectl get pods
+clear
+kubectl get pods
+docker images
+clear
+kubectl get pods
+cat create-job.yml
+kubectl get pods
+kubectl logs countdown-25twg
+kubectl describe pod countdown-25twg
+kubectl apply -f create-job.yml
+vi create-job.yml
+kubectl apply -f create-job.yml
+claer
+clear
+kubectl get jobs
+kubectl delete job countdown
+vi create-job.yml
+kubectl apply -f create-job.yml
+kubectl get jobs
+kubectl get pods
+kubectl logs countdown-hpdkc
+kubectl delete job countdown
+kubectl get pods
+history -w /dev/stdout
+root@kubernetes:~/k8s/deployments#                                                                                                                                                                                                                                                                                                                                                                          ----------------------                                                                                                                                                        create-cron-job.yml
+kubectl apply -f create-cron-job.yml
+kubectl get jobs
+kubectl get pods
+kubectl get cronjobs
+kubectl get pods
+kubectl get jobs --watch
+kubectl logs timer-1609402020
+pods=$(kubectl get pods --selector=job-name=timer-1609402200 --output=jsonpath={.items[*].metadata.name})
+kubectl logs $pods
+kubectl get pods
+kubectl logs timer-1609402320-72brh
+kubectl get cronjobs
+kubectl delete cronjob timer
+kubectl get cronjobs
+kubectl get jobs
+kubectl get pods
+
+
+configMap.yml
+pod-configMap.yml
+
+kubectl apply -f pod-configMap.yml
+kubectl get pods
+kubectl get configmaps
+kubectl get pods
+
+create-secret.yml
+kubectl apply -f create-secret.yml
+kubectl get secrets
+kubectl delete secret tomcat-pass
+kubectl get secrets
+==========================================   
+
+scaling
+deployment-replicas.yml
+kubectl apply -f deployment-replicas.yml
+kubectl get deployments
+kubectl get pods
+
+kubectl run hello-nginx --image=nginx --port=80 
+kubectl create deployment hello-nginx --image=nginx
+kubectl get deployments
+kubectl scale --replicas=3 deployment/hello-nginx
+kubectl get
+-------------------------------------------------------------------------------
+cpu-limits.yml   
+
+kubectl apply -f cpu-limits.yml
+kubectl get pods
+kubectl describe pod springpeople-cpu | grep -A 4 Limits
+
+   Limits:
+      cpu:  1                   # max limit
+    Requests:
+      cpu:        500m          # default allocation
+    Environment:  <none>
+
+
+memory-limits.yml   
+
+kubectl apply -f memory-limits.yml
+kubectl get pods
+kubectl describe pod springpeople-memory | grep -A 4 Limits
+
+    Limits:
+      memory:  400Mi           # max limit
+    Requests:
+      memory:     200Mi        # default allocation
+    Environment:  <none>
+
+
+------------------------------------------------------------------------
+kubectl run kubernetes-bootcamp --image=jocatalin/kubernetes-bootcamp:v1
+
+kubectl create deployment kubernetes-bootcamp --image=jocatalin/kubernetes-bootcamp:v1
+
+kubectl expose deployment kubernetes-bootcamp --type=NodePort --port=8080
+kubectl port-forward svc/kubernetes-bootcamp 8181:8080 --address 0.0.0.0 &
+# access application at <IP:8181>       -  Hello Kubernetes bootcamp! | Running on: kubernetes-bootcamp-676c665d49-zngdc | v=1
+
+# rolling update
+kubectl set image deployments/kubernetes-bootcamp kubernetes-bootcamp=jocatalin/kubernetes-bootcamp:v2
+kubectl rollout status deployments/kubernetes-bootcamp
+kubectl logs deployments/kubernetes-bootcamp
+
+kubectl port-forward svc/kubernetes-bootcamp 8181:8080 --address 0.0.0.0 &
+# access application at <IP:8181>        -  Hello Kubernetes bootcamp! | Running on: kubernetes-bootcamp-5475b47cd4-b9sbn | v=2
+
+kubectl rollout history deployments/kubernetes-bootcamp
+
+# rollback
+kubectl rollout undo deployments/kubernetes-bootcamp
+kubectl get pods
+kubectl logs deployments/kubernetes-bootcamp
+kubectl port-forward svc/kubernetes-bootcamp 8181:8080 --address 0.0.0.0 &
+# access application at <IP:8181>       -  Hello Kubernetes bootcamp! | Running on: kubernetes-bootcamp-676c665d49-2mtwp | v=1
+-------------------------------------
+
+#Autoscaling
+kubectl autoscale deployment kubernetes-bootcamp --cpu-percent=80 --min=1 --max=10
+kubectl get hpa
+kubectl delete hpa kubernetes-bootcamp
+kubectl autoscale deployment kubernetes-bootcamp --cpu-percent=50 --min=1 --max=10
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        kubectl delete hpa kubernetes-bootcamp
+kubectl autoscale deployment kubernetes-bootcamp --cpu-percent=50 --min=3 --max=10
+kubectl get hpa
+kubectl get pods                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+
+
